@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangziping.mapper.DriverDao">
+
+	<resultMap type="Driver" id="driverMap">
+		<id column="id" property="id" />
+		<result column="driver_num" property="driverNum" />
+		<result column="name" property="name" />
+		<result column="sex" property="sex" />
+		<result column="province_id" property="provinceId" />
+		<result column="city_id" property="cityId" />
+		<result column="county_id" property="countyId" />
+		<result column="created" property="created" />
+
+		<association property="violationCount"
+			select="com.wangziping.mapper.ViolationDao.getViolationCountByDid"
+			column="id">
+			<result column="violationCount" property="violationCount" />
+		</association>
+		<association property="province" column="province_id"
+			select="com.wangziping.mapper.CityDao.getCityById"></association>
+		<association property="city" column="city_id"
+			select="com.wangziping.mapper.CityDao.getCityById"></association>
+		<association property="county" column="county_id"
+			select="com.wangziping.mapper.CityDao.getCityById"></association>
+	</resultMap>
+
+	<select id="getDrivers" resultMap="driverMap">
+		<!-- select d.*, (select count(v.id) from violation v where v.did = 1) 
+			as violationCount from driver d -->
+		select * from driver
+		<where>
+			<if test="null != name and name != ''">
+				and name like concat('%', #{name}, '%')
+			</if>
+		</where>
+	</select>
+
+	<insert id="addDriver">
+		insert into driver(driver_num, name, sex,
+		province_id, city_id, county_id, created) values(#{driverNum},
+		#{name}, #{sex}, #{provinceId}, #{cityId}, #{countyId}, now() )
+	</insert>
+
+	<select id="getDriverById" resultMap="driverMap">
+		select * from driver where
+		id = #{id}
+	</select>
+
+	<update id="updateDriverInfoById">
+		update driver set driver_num = #{driverNum}, name =
+		#{name}, sex = #{sex},
+		province_id = #{provinceId}, city_id =
+		#{cityId}, county_id = #{countyId} where id = #{id}
+	</update>
+
+
+
+</mapper>

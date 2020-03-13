@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangziping.mapper.ViolationDao">
+
+	<resultMap type="Violation" id="violationMap">
+		<id column="id" property="id" />
+		<result column="did" property="did" />
+		<result column="detail" property="detail" />
+		<result column="penalty" property="penalty" />
+		<result column="points" property="points" />
+		<result column="created" property="created" />
+		<result column="status" property="status" />
+		<association property="driver" column="did"
+			select="com.wangziping.mapper.DriverDao.getDriverById"
+			javaType="Driver">
+		</association>
+	</resultMap>
+
+	<select id="getViolations" resultMap="violationMap">
+		select * from violation
+		where did = #{did}
+	</select>
+
+	<select id="getViolationCountByDid" resultType="Integer">
+		select count(id)
+		from violation where did = #{id}
+	</select>
+
+</mapper>

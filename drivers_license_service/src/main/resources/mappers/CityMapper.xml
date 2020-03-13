@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangziping.mapper.CityDao">
+
+	<resultMap type="City" id="cityMap">
+		<id column="id" property="id" />
+		<result column="pid" property="pid" />
+		<result column="cityName" property="cityName" />
+	</resultMap>
+
+	<select id="getCityById" resultMap="cityMap">
+		select * from city where id =
+		#{id}
+	</select>
+
+	<select id="getCityByPid" resultMap="cityMap">
+		select * from city where pid
+		= #{id}
+	</select>
+
+	<select id="getProvince" resultMap="cityMap">
+		select * from city where pid = 0
+	</select>
+</mapper>
